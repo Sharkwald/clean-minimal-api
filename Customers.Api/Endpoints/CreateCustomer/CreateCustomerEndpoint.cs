@@ -1,13 +1,12 @@
 ﻿using Customers.Api.Endpoints.Common;
-using Customers.Api.Endpoints.GetCustomer;
 using Customers.Api.Services;
 using FastEndpoints;
-using Microsoft.AspNetCore.Authorization;
+using FluentValidation;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Customers.Api.Endpoints.CreateCustomer;
 
-[HttpPost("customers"), AllowAnonymous]
-public class CreateCustomerEndpoint : Endpoint<CreateCustomerRequest, CustomerResponse>
+public class CreateCustomerEndpoint : Endpoint<CreateCustomerRequest, Results<CreatedAtRoute<CustomerResponse>, BadRequest>>
 {
     private readonly ICustomerService _customerService;
 
@@ -16,14 +15,29 @@ public class CreateCustomerEndpoint : Endpoint<CreateCustomerRequest, CustomerRe
         _customerService = customerService;
     }
 
-    public override async Task HandleAsync(CreateCustomerRequest req, CancellationToken ct)
+    public override void Configure()
     {
-        var customer = req.ToCustomer();
+        Post("customers");
+        Description(x => x.WithName("GetCustomer"));
+        AllowAnonymous();
+    } 
 
-        await _customerService.CreateAsync(customer);
+    public override async Task<Results<CreatedAtRoute<CustomerResponse>, BadRequest>> ExecuteAsync(
+        CreateCustomerRequest req, CancellationToken ct)
+    {
+        try
+        {
+            var customer = req.ToCustomer();
 
-        var customerResponse = customer.ToCustomerResponse();
-        await SendCreatedAtAsync<GetCustomerEndpoint>(
-            new { Id = customer.Id.Value }, customerResponse, generateAbsoluteUrl: true, cancellation: ct);
+            await _customerService.CreateAsync(customer);
+
+            var customerResponse = customer.ToCustomerResponse();
+
+            return TypedResults.CreatedAtRoute(customerResponse, "GetCustomer", new { ID = customer.Id.Value });
+        }
+        catch (Exception ex) when (ex is not ValidationException) 
+        {
+            return TypedResults.BadRequest();
+        }
     }
 }

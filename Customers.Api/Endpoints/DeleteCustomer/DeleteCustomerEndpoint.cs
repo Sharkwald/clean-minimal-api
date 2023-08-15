@@ -1,11 +1,13 @@
 ﻿using Customers.Api.Services;
 using FastEndpoints;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Customers.Api.Endpoints.DeleteCustomer;
 
 [HttpDelete("customers/{id:guid}"), AllowAnonymous]
-public class DeleteCustomerEndpoint : Endpoint<DeleteCustomerRequest>
+public class DeleteCustomerEndpoint : Endpoint<DeleteCustomerRequest, Results<NoContent, BadRequest, NotFound>>
 {
     private readonly ICustomerService _customerService;
 
@@ -14,15 +16,21 @@ public class DeleteCustomerEndpoint : Endpoint<DeleteCustomerRequest>
         _customerService = customerService;
     }
 
-    public override async Task HandleAsync(DeleteCustomerRequest req, CancellationToken ct)
+    public override async Task<Results<NoContent, BadRequest, NotFound>> ExecuteAsync(DeleteCustomerRequest req, CancellationToken ct)
     {
-        var deleted = await _customerService.DeleteAsync(req.Id);
-        if (!deleted)
+        try
         {
-            await SendNotFoundAsync(ct);
-            return;
-        }
+            var deleted = await _customerService.DeleteAsync(req.Id);
+            if (!deleted)
+            {
+                return TypedResults.NotFound();
+            }
 
-        await SendNoContentAsync(ct);
+            return TypedResults.NoContent();
+        }
+        catch (Exception ex) when (ex is not ValidationException)
+        {
+            return TypedResults.BadRequest();
+        }
     }
 }

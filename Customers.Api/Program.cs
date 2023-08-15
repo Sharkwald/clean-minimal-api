@@ -21,15 +21,19 @@ builder.Services.AddSingleton<ICustomerService, CustomerService>();
 var app = builder.Build();
 
 app.UseMiddleware<ValidationExceptionMiddleware>();
+// app.UseFastEndpoints(x =>
+// {
+//     x.ErrorResponseBuilder = (failures, _) =>
+//     {
+//         return new ValidationFailureResponse
+//         {
+//             Errors = failures.Select(y => y.ErrorMessage).ToList()
+//         };
+//     };
+// });
 app.UseFastEndpoints(x =>
 {
-    x.ErrorResponseBuilder = (failures, _) =>
-    {
-        return new ValidationFailureResponse
-        {
-            Errors = failures.Select(y => y.ErrorMessage).ToList()
-        };
-    };
+    x.Errors.ResponseBuilder = ProblemDetails.ResponseBuilder;
 });
 
 app.UseOpenApi();
