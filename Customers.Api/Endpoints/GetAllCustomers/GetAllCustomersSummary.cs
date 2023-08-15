@@ -1,8 +1,6 @@
-using Customers.Api.Contracts.Responses;
-using Customers.Api.Endpoints;
 using FastEndpoints;
 
-namespace Customers.Api.Summaries;
+namespace Customers.Api.Endpoints.GetAllCustomers;
 
 public class GetAllCustomersSummary : Summary<GetAllCustomersEndpoint>
 {

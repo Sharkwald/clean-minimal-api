@@ -1,9 +1,7 @@
-﻿namespace Customers.Api.Contracts.Responses;
+﻿namespace Customers.Api.Endpoints.CreateCustomer;
 
-public class CustomerResponse
+public class CreateCustomerRequest
 {
-    public Guid Id { get; init; }
-
     public string Username { get; init; } = default!;
 
     public string FullName { get; init; } = default!;

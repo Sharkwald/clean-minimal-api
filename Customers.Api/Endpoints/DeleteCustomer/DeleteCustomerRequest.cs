@@ -1,4 +1,4 @@
-﻿namespace Customers.Api.Contracts.Requests;
+﻿namespace Customers.Api.Endpoints.DeleteCustomer;
 
 public class DeleteCustomerRequest
 {

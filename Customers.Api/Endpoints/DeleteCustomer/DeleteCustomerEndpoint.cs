@@ -1,9 +1,8 @@
-﻿using Customers.Api.Contracts.Requests;
-using Customers.Api.Services;
+﻿using Customers.Api.Services;
 using FastEndpoints;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Customers.Api.Endpoints;
+namespace Customers.Api.Endpoints.DeleteCustomer;
 
 [HttpDelete("customers/{id:guid}"), AllowAnonymous]
 public class DeleteCustomerEndpoint : Endpoint<DeleteCustomerRequest>

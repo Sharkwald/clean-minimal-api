@@ -1,15 +1,14 @@
-﻿using Customers.Api.Contracts.Data;
 using Customers.Api.Domain;
 
-namespace Customers.Api.Mapping;
+namespace Customers.Api.Endpoints.Common;
 
-public static class DomainToDtoMapper
+public static class Mapper
 {
-    public static CustomerDto ToCustomerDto(this Customer customer)
+    public static CustomerResponse ToCustomerResponse(this Customer customer)
     {
-        return new CustomerDto
+        return new CustomerResponse
         {
-            Id = customer.Id.Value.ToString(),
+            Id = customer.Id.Value,
             Email = customer.Email.Value,
             Username = customer.Username.Value,
             FullName = customer.FullName.Value,

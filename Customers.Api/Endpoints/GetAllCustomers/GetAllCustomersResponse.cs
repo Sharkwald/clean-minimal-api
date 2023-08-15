@@ -1,4 +1,6 @@
-﻿namespace Customers.Api.Contracts.Responses;
+﻿using Customers.Api.Endpoints.Common;
+
+namespace Customers.Api.Endpoints.GetAllCustomers;
 
 public class GetAllCustomersResponse
 {

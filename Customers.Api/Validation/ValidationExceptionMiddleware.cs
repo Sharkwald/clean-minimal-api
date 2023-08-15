@@ -1,4 +1,4 @@
-﻿using Customers.Api.Contracts.Responses;
+﻿using Customers.Api.Endpoints.Common;
 using FluentValidation;
 
 namespace Customers.Api.Validation;
@@ -24,6 +24,7 @@ public class ValidationExceptionMiddleware
             var messages = exception.Errors.Select(x => x.ErrorMessage).ToList();
             var validationFailureResponse = new ValidationFailureResponse
             {
+                
                 Errors = messages
             };
             await context.Response.WriteAsJsonAsync(validationFailureResponse);

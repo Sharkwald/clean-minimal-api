@@ -1,4 +1,4 @@
-﻿using Customers.Api.Contracts.Data;
+﻿using Customers.Api.Contracts;
 
 namespace Customers.Api.Repositories;
 

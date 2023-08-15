@@ -1,8 +1,7 @@
-using Customers.Api.Contracts.Responses;
-using Customers.Api.Endpoints;
+using Customers.Api.Endpoints.Common;
 using FastEndpoints;
 
-namespace Customers.Api.Summaries;
+namespace Customers.Api.Endpoints.GetCustomer;
 
 public class GetCustomerSummary : Summary<GetCustomerEndpoint>
 {
@@ -10,7 +9,7 @@ public class GetCustomerSummary : Summary<GetCustomerEndpoint>
     {
         Summary = "Returns a single customer by id";
         Description = "Returns a single customer by id";
-        Response<GetAllCustomersResponse>(200, "Successfully found and returned the customer");
+        Response<CustomerResponse>(200, "Successfully found and returned the customer");
         Response(404, "The customer does not exist in the system");
     }
 }

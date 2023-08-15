@@ -1,7 +1,9 @@
-﻿namespace Customers.Api.Contracts.Requests;
+﻿namespace Customers.Api.Contracts;
 
-public class CreateCustomerRequest
+public class CustomerDto
 {
+    public string Id { get; init; } = default!;
+
     public string Username { get; init; } = default!;
 
     public string FullName { get; init; } = default!;

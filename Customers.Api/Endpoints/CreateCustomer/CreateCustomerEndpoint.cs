@@ -1,11 +1,10 @@
-﻿using Customers.Api.Contracts.Requests;
-using Customers.Api.Contracts.Responses;
-using Customers.Api.Mapping;
+﻿using Customers.Api.Endpoints.Common;
+using Customers.Api.Endpoints.GetCustomer;
 using Customers.Api.Services;
 using FastEndpoints;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Customers.Api.Endpoints;
+namespace Customers.Api.Endpoints.CreateCustomer;
 
 [HttpPost("customers"), AllowAnonymous]
 public class CreateCustomerEndpoint : Endpoint<CreateCustomerRequest, CustomerResponse>

@@ -1,8 +1,8 @@
-﻿namespace Customers.Api.Contracts.Data;
+﻿namespace Customers.Api.Endpoints.Common;
 
-public class CustomerDto
+public class CustomerResponse
 {
-    public string Id { get; init; } = default!;
+    public Guid Id { get; init; }
 
     public string Username { get; init; } = default!;
 

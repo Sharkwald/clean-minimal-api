@@ -1,7 +1,6 @@
-using Customers.Api.Endpoints;
 using FastEndpoints;
 
-namespace Customers.Api.Summaries;
+namespace Customers.Api.Endpoints.DeleteCustomer;
 
 public class DeleteCustomerSummary : Summary<DeleteCustomerEndpoint>
 {

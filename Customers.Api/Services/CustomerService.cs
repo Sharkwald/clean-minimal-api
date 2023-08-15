@@ -1,5 +1,5 @@
-﻿using Customers.Api.Domain;
-using Customers.Api.Mapping;
+﻿using Customers.Api.Contracts;
+using Customers.Api.Domain;
 using Customers.Api.Repositories;
 using FluentValidation;
 using FluentValidation.Results;

@@ -1,10 +1,8 @@
-﻿using Customers.Api.Contracts.Responses;
-using Customers.Api.Mapping;
-using Customers.Api.Services;
+﻿using Customers.Api.Services;
 using FastEndpoints;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Customers.Api.Endpoints;
+namespace Customers.Api.Endpoints.GetAllCustomers;
 
 [HttpGet("customers"), AllowAnonymous]
 public class GetAllCustomersEndpoint : EndpointWithoutRequest<GetAllCustomersResponse>

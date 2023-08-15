@@ -1,7 +1,6 @@
-﻿using Customers.Api.Contracts.Requests;
-using FluentValidation;
+﻿using FluentValidation;
 
-namespace Customers.Api.Validation;
+namespace Customers.Api.Endpoints.CreateCustomer;
 
 public class CreateCustomerRequestValidator : AbstractValidator<CreateCustomerRequest>
 {

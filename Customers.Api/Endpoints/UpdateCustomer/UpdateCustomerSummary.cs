@@ -1,8 +1,7 @@
-using Customers.Api.Contracts.Responses;
-using Customers.Api.Endpoints;
+using Customers.Api.Endpoints.Common;
 using FastEndpoints;
 
-namespace Customers.Api.Summaries;
+namespace Customers.Api.Endpoints.UpdateCustomer;
 
 public class UpdateCustomerSummary : Summary<UpdateCustomerEndpoint>
 {
