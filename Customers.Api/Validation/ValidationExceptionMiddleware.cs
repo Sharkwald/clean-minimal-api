@@ -1,7 +1,8 @@
-﻿using Customers.Api.Endpoints.Common;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace Customers.Api.Validation;
+
+using Actions.Common;
 
 public class ValidationExceptionMiddleware
 {

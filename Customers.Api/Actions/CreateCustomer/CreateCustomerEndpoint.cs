@@ -1,9 +1,9 @@
-﻿using Customers.Api.Endpoints.Common;
-using Customers.Api.Services;
+﻿namespace Customers.Api.Actions.CreateCustomer;
+
+using Common;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http.HttpResults;
-
-namespace Customers.Api.Endpoints.CreateCustomer;
+using Services;
 
 public class
     CreateCustomerEndpoint : Endpoint<CreateCustomerRequest, Results<CreatedAtRoute<CustomerResponse>, StatusCodeHttpResult>>

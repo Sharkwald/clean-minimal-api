@@ -1,6 +1,6 @@
-﻿namespace Customers.Api.Endpoints.Common;
+﻿namespace Customers.Api.Actions.UpdateCustomer;
 
-public class CustomerResponse
+public class UpdateCustomerRequest
 {
     public Guid Id { get; init; }
 

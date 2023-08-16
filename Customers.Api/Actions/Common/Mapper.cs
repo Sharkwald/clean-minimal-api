@@ -1,6 +1,6 @@
-using Customers.Api.Domain;
+namespace Customers.Api.Actions.Common;
 
-namespace Customers.Api.Endpoints.Common;
+using Domain;
 
 public static class Mapper
 {

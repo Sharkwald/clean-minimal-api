@@ -1,4 +1,4 @@
-﻿namespace Customers.Api.Endpoints.Common;
+﻿namespace Customers.Api.Actions.Common;
 
 public class ValidationFailureResponse
 {

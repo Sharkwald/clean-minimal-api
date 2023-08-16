@@ -1,4 +1,4 @@
-﻿namespace Customers.Api.Endpoints.GetCustomer;
+﻿namespace Customers.Api.Actions.GetCustomer;
 
 public class GetCustomerRequest
 {

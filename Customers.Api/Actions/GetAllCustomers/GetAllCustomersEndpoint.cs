@@ -1,10 +1,9 @@
-﻿using Customers.Api.Services;
+﻿namespace Customers.Api.Actions.GetAllCustomers;
+
 using FastEndpoints;
-using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
-
-namespace Customers.Api.Endpoints.GetAllCustomers;
+using Services;
 
 [HttpGet("customers"), AllowAnonymous]
 public class GetAllCustomersEndpoint : EndpointWithoutRequest<Results<Ok<GetAllCustomersResponse>, StatusCodeHttpResult>>

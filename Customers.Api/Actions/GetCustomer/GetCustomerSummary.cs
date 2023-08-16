@@ -1,7 +1,7 @@
-using Customers.Api.Endpoints.Common;
-using FastEndpoints;
+namespace Customers.Api.Actions.GetCustomer;
 
-namespace Customers.Api.Endpoints.GetCustomer;
+using Common;
+using FastEndpoints;
 
 public class GetCustomerSummary : Summary<GetCustomerEndpoint>
 {

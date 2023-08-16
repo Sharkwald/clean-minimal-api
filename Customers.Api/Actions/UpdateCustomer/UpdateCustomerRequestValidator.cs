@@ -1,6 +1,6 @@
-﻿using FluentValidation;
+﻿namespace Customers.Api.Actions.UpdateCustomer;
 
-namespace Customers.Api.Endpoints.UpdateCustomer;
+using FluentValidation;
 
 public class UpdateCustomerRequestValidator : AbstractValidator<UpdateCustomerRequest>
 {

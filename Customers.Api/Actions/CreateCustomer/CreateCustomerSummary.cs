@@ -1,7 +1,7 @@
-using Customers.Api.Endpoints.Common;
-using FastEndpoints;
+namespace Customers.Api.Actions.CreateCustomer;
 
-namespace Customers.Api.Endpoints.CreateCustomer;
+using Common;
+using FastEndpoints;
 
 public class CreateCustomerSummary : Summary<CreateCustomerEndpoint>
 {

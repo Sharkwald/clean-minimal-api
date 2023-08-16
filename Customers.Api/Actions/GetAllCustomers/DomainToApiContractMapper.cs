@@ -1,7 +1,7 @@
-﻿using Customers.Api.Domain;
-using Customers.Api.Endpoints.Common;
+﻿namespace Customers.Api.Actions.GetAllCustomers;
 
-namespace Customers.Api.Endpoints.GetAllCustomers;
+using Common;
+using Domain;
 
 public static class Mapper
 {

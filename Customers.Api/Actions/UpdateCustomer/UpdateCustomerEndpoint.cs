@@ -1,11 +1,10 @@
-﻿using Customers.Api.Endpoints.Common;
-using Customers.Api.Services;
+﻿namespace Customers.Api.Actions.UpdateCustomer;
+
+using Common;
 using FastEndpoints;
-using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
-
-namespace Customers.Api.Endpoints.UpdateCustomer;
+using Services;
 
 [HttpPut("customers/{id:guid}"), AllowAnonymous]
 public class UpdateCustomerEndpoint : 

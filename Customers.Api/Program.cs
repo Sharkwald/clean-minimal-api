@@ -1,5 +1,4 @@
 using Customers.Api.Database;
-using Customers.Api.Endpoints.Common;
 using Customers.Api.Repositories;
 using Customers.Api.Services;
 using Customers.Api.Validation;

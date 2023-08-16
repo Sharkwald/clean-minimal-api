@@ -1,6 +1,6 @@
-﻿using Customers.Api.Endpoints.Common;
+﻿namespace Customers.Api.Actions.GetAllCustomers;
 
-namespace Customers.Api.Endpoints.GetAllCustomers;
+using Common;
 
 public class GetAllCustomersResponse
 {
