@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.Http.HttpResults;
 namespace Customers.Api.Endpoints.UpdateCustomer;
 
 [HttpPut("customers/{id:guid}"), AllowAnonymous]
-public class UpdateCustomerEndpoint : Endpoint<UpdateCustomerRequest, Results<Ok<CustomerResponse>, NotFound, BadRequest>>
+public class UpdateCustomerEndpoint : 
+    Endpoint<UpdateCustomerRequest, Results<Ok<CustomerResponse>, NotFound, StatusCodeHttpResult>>
 {
     private readonly ICustomerService _customerService;
 
@@ -17,26 +18,22 @@ public class UpdateCustomerEndpoint : Endpoint<UpdateCustomerRequest, Results<Ok
         _customerService = customerService;
     }
 
-    public override async Task<Results<Ok<CustomerResponse>, NotFound, BadRequest>> ExecuteAsync(UpdateCustomerRequest req, CancellationToken ct)
+    public override async Task<Results<Ok<CustomerResponse>, NotFound, StatusCodeHttpResult>> ExecuteAsync(
+        UpdateCustomerRequest req, CancellationToken ct)
     {
-        try
-        {
-            var existingCustomer = await _customerService.GetAsync(req.Id);
-
-            if (existingCustomer is null)
+        var existingCustomerResult = await _customerService.GetAsync(req.Id, ct);
+        if (!existingCustomerResult.IsSuccess) return TypedResults.NotFound();
+        
+        var updatedCustomer = req.ToCustomer();
+        var updateResult = await _customerService.UpdateAsync(updatedCustomer, ct);
+        
+        return updateResult.Match<Results<Ok<CustomerResponse>, NotFound, StatusCodeHttpResult>>(
+            _ => TypedResults.Ok(updatedCustomer.ToCustomerResponse()),
+            error => error switch
             {
-                return TypedResults.NotFound();
+                ErrorResult.NotFound => TypedResults.NotFound(),
+                _ => TypedResults.StatusCode(500)
             }
-
-            var customer = req.ToCustomer();
-            await _customerService.UpdateAsync(customer);
-
-            var customerResponse = customer.ToCustomerResponse();
-            return TypedResults.Ok(customerResponse);
-        }
-        catch (Exception ex) when (ex is not ValidationException)
-        {
-            return TypedResults.BadRequest();
-        }
+        );
     }
 }

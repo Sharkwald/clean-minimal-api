@@ -13,7 +13,7 @@ public class CustomerRepository : ICustomerRepository
         _connectionFactory = connectionFactory;
     }
 
-    public async Task<bool> CreateAsync(CustomerDto customer)
+    public async Task<bool> CreateAsync(CustomerDto customer, CancellationToken ct)
     {
         using var connection = await _connectionFactory.CreateConnectionAsync();
         var result = await connection.ExecuteAsync(
@@ -23,20 +23,20 @@ public class CustomerRepository : ICustomerRepository
         return result > 0;
     }
 
-    public async Task<CustomerDto?> GetAsync(Guid id)
+    public async Task<CustomerDto?> GetAsync(Guid id, CancellationToken ct)
     {
         using var connection = await _connectionFactory.CreateConnectionAsync();
         return await connection.QuerySingleOrDefaultAsync<CustomerDto>(
             "SELECT * FROM Customers WHERE Id = @Id LIMIT 1", new { Id = id.ToString() });
     }
 
-    public async Task<IEnumerable<CustomerDto>> GetAllAsync()
+    public async Task<IEnumerable<CustomerDto>> GetAllAsync(CancellationToken ct)
     {
         using var connection = await _connectionFactory.CreateConnectionAsync();
         return await connection.QueryAsync<CustomerDto>("SELECT * FROM Customers");
     }
 
-    public async Task<bool> UpdateAsync(CustomerDto customer)
+    public async Task<bool> UpdateAsync(CustomerDto customer, CancellationToken ct)
     {
         using var connection = await _connectionFactory.CreateConnectionAsync();
         var result = await connection.ExecuteAsync(
@@ -46,7 +46,7 @@ public class CustomerRepository : ICustomerRepository
         return result > 0;
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task<bool> DeleteAsync(Guid id, CancellationToken ct)
     {
         using var connection = await _connectionFactory.CreateConnectionAsync();
         var result = await connection.ExecuteAsync(@"DELETE FROM Customers WHERE Id = @Id",

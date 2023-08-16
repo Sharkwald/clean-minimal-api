@@ -1,12 +1,12 @@
 ﻿using Customers.Api.Endpoints.Common;
 using Customers.Api.Services;
 using FastEndpoints;
-using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Customers.Api.Endpoints.CreateCustomer;
 
-public class CreateCustomerEndpoint : Endpoint<CreateCustomerRequest, Results<CreatedAtRoute<CustomerResponse>, BadRequest>>
+public class
+    CreateCustomerEndpoint : Endpoint<CreateCustomerRequest, Results<CreatedAtRoute<CustomerResponse>, StatusCodeHttpResult>>
 {
     private readonly ICustomerService _customerService;
 
@@ -20,24 +20,22 @@ public class CreateCustomerEndpoint : Endpoint<CreateCustomerRequest, Results<Cr
         Post("customers");
         Description(x => x.WithName("GetCustomer"));
         AllowAnonymous();
-    } 
+    }
 
-    public override async Task<Results<CreatedAtRoute<CustomerResponse>, BadRequest>> ExecuteAsync(
+    public override async Task<Results<CreatedAtRoute<CustomerResponse>, StatusCodeHttpResult>> ExecuteAsync(
         CreateCustomerRequest req, CancellationToken ct)
     {
-        try
-        {
-            var customer = req.ToCustomer();
+        var customer = req.ToCustomer();
 
-            await _customerService.CreateAsync(customer);
+        var creationResult = await _customerService.CreateAsync(customer, ct);
 
-            var customerResponse = customer.ToCustomerResponse();
-
-            return TypedResults.CreatedAtRoute(customerResponse, "GetCustomer", new { ID = customer.Id.Value });
-        }
-        catch (Exception ex) when (ex is not ValidationException) 
-        {
-            return TypedResults.BadRequest();
-        }
+        return creationResult.Match<Results<CreatedAtRoute<CustomerResponse>, StatusCodeHttpResult>>(
+            _ =>
+            {
+                var customerResponse = customer.ToCustomerResponse();
+                return TypedResults.CreatedAtRoute(customerResponse, "GetCustomer", new { ID = customer.Id.Value });
+            },
+            _ => TypedResults.StatusCode(500)
+        );
     }
 }

@@ -3,7 +3,7 @@ GET https://localhost:5001/customers
 Accept: application/json
 
 ### Get user by id
-GET https://localhost:5001/customers/
+GET https://localhost:5001/customers/cf102bc6-b047-450c-8c1d-71921f4958ab
 Accept: application/json
 
 ### Create customer

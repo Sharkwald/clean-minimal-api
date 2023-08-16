@@ -4,13 +4,13 @@ namespace Customers.Api.Services;
 
 public interface ICustomerService
 {
-    Task<bool> CreateAsync(Customer customer);
+    Task<Result<SuccessResult, ErrorResult>> CreateAsync(Customer customer, CancellationToken ct);
 
-    Task<Customer?> GetAsync(Guid id);
+    Task<Result<Customer, ErrorResult>> GetAsync(Guid id, CancellationToken ct);
 
-    Task<IEnumerable<Customer>> GetAllAsync();
+    Task<Result<IList<Customer>, ErrorResult>> GetAllAsync(CancellationToken ct);
 
-    Task<bool> UpdateAsync(Customer customer);
+    Task<Result<SuccessResult, ErrorResult>> UpdateAsync(Customer customer, CancellationToken ct);
 
-    Task<bool> DeleteAsync(Guid id);
+    Task<Result<SuccessResult, ErrorResult>> DeleteAsync(Guid id, CancellationToken ct);
 }

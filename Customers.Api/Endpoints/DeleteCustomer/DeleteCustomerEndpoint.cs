@@ -1,13 +1,12 @@
 ﻿using Customers.Api.Services;
 using FastEndpoints;
-using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Customers.Api.Endpoints.DeleteCustomer;
 
 [HttpDelete("customers/{id:guid}"), AllowAnonymous]
-public class DeleteCustomerEndpoint : Endpoint<DeleteCustomerRequest, Results<NoContent, BadRequest, NotFound>>
+public class DeleteCustomerEndpoint : Endpoint<DeleteCustomerRequest, Results<NoContent, NotFound, StatusCodeHttpResult>>
 {
     private readonly ICustomerService _customerService;
 
@@ -16,21 +15,19 @@ public class DeleteCustomerEndpoint : Endpoint<DeleteCustomerRequest, Results<No
         _customerService = customerService;
     }
 
-    public override async Task<Results<NoContent, BadRequest, NotFound>> ExecuteAsync(DeleteCustomerRequest req, CancellationToken ct)
+    public override async Task<Results<NoContent, NotFound, StatusCodeHttpResult>> ExecuteAsync(DeleteCustomerRequest req,
+        CancellationToken ct)
     {
-        try
-        {
-            var deleted = await _customerService.DeleteAsync(req.Id);
-            if (!deleted)
+        var deletionResult = await _customerService.DeleteAsync(req.Id, ct);
+        
+        return deletionResult.Match<Results<NoContent, NotFound, StatusCodeHttpResult>>(
+            _ => TypedResults.NoContent(),
+            error => error switch 
             {
-                return TypedResults.NotFound();
+                ErrorResult.NotFound => TypedResults.NotFound(),
+                ErrorResult.Unauthorized => TypedResults.NotFound(), // avoid different response as existence test
+                _ => TypedResults.StatusCode(500)
             }
-
-            return TypedResults.NoContent();
-        }
-        catch (Exception ex) when (ex is not ValidationException)
-        {
-            return TypedResults.BadRequest();
-        }
+        );
     }
 }

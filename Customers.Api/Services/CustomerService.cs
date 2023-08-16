@@ -15,42 +15,87 @@ public class CustomerService : ICustomerService
         _customerRepository = customerRepository;
     }
 
-    public async Task<bool> CreateAsync(Customer customer)
+    public async Task<Result<SuccessResult,ErrorResult>> CreateAsync(Customer customer, CancellationToken ct)
     {
-        var existingUser = await _customerRepository.GetAsync(customer.Id.Value);
-        if (existingUser is not null)
+        try
         {
-            var message = $"A user with id {customer.Id} already exists";
-            throw new ValidationException(message, new []
+            var existingUser = await _customerRepository.GetAsync(customer.Id.Value, ct);
+            if (existingUser is not null)
             {
-                new ValidationFailure(nameof(Customer), message)
-            });
+                var message = $"A user with id {customer.Id} already exists";
+                throw new ValidationException(message, new[]
+                {
+                    new ValidationFailure(nameof(Customer), message)
+                });
+            }
+
+            var customerDto = customer.ToCustomerDto();
+            var success = await _customerRepository.CreateAsync(customerDto, ct);
+            return success ? SuccessResult.Success : ErrorResult.UnexpectedError;
         }
-
-        var customerDto = customer.ToCustomerDto();
-        return await _customerRepository.CreateAsync(customerDto);
+        catch (Exception ex)
+        {
+            //TODO: Log error.
+            return ErrorResult.UnexpectedError;
+        }
     }
 
-    public async Task<Customer?> GetAsync(Guid id)
+    public async Task<Result<Customer,ErrorResult>> GetAsync(Guid id, CancellationToken ct)
     {
-        var customerDto = await _customerRepository.GetAsync(id);
-        return customerDto?.ToCustomer();
+        try
+        {
+            var customerDto = await _customerRepository.GetAsync(id, ct);
+            if (customerDto == default(CustomerDto)) return ErrorResult.NotFound;
+            return customerDto?.ToCustomer();
+        }
+        catch (Exception ex)
+        {
+            //TODO: Log error.
+            return ErrorResult.UnexpectedError;
+        }
     }
 
-    public async Task<IEnumerable<Customer>> GetAllAsync()
+    public async Task<Result<IList<Customer>, ErrorResult>> GetAllAsync(CancellationToken ct)
     {
-        var customerDtos = await _customerRepository.GetAllAsync();
-        return customerDtos.Select(x => x.ToCustomer());
+        try
+        {
+            var customerDtos = await _customerRepository.GetAllAsync(ct);
+            var customers = customerDtos.Select(x => x.ToCustomer()).ToList();
+            return customers;
+        }
+        catch (Exception ex)
+        {
+            //TODO: Log error.
+            return ErrorResult.UnexpectedError;
+        }
     }
 
-    public async Task<bool> UpdateAsync(Customer customer)
+    public async Task<Result<SuccessResult, ErrorResult>> UpdateAsync(Customer customer, CancellationToken ct)
     {
-        var customerDto = customer.ToCustomerDto();
-        return await _customerRepository.UpdateAsync(customerDto);
+        try
+        {
+            var customerDto = customer.ToCustomerDto();
+            var success = await _customerRepository.UpdateAsync(customerDto, ct);
+            return success ? SuccessResult.Success : ErrorResult.NotFound;
+        }
+        catch (Exception ex)
+        {
+            //TODO: Log error.
+            return ErrorResult.UnexpectedError;
+        }
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task<Result<SuccessResult, ErrorResult>> DeleteAsync(Guid id, CancellationToken ct)
     {
-        return await _customerRepository.DeleteAsync(id);
+        try
+        {
+            var success = await _customerRepository.DeleteAsync(id, ct);
+            return success ? SuccessResult.Success : ErrorResult.NotFound;
+        }
+        catch (Exception ex)
+        {
+            //TODO: Log error.
+            return ErrorResult.UnexpectedError;
+        }
     }
 }
